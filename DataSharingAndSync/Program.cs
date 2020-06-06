@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DataSharingAndSync
@@ -44,22 +45,19 @@ namespace DataSharingAndSync
     class BankAccount
     {
         public object padlock = new object();
-        public int Balance { get; set; }
+        public int balance;
+        public int Balance { get; private set; }
 
+        // interlocked class contains atomic operations on variables
+        // atomic = cannot be interrupted
         public void Deposit(int amount)
         {
-            lock (padlock)
-            {
-                Balance += amount;
-            }
+            Interlocked.Add(ref balance, amount);
         }
 
         public void Withdraw(int amount)
         {
-            lock (padlock)
-            {
-                Balance -= amount;
-            }
+            Interlocked.Add(ref balance, -amount);
         }
     }
 }
