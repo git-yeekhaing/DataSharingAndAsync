@@ -43,16 +43,23 @@ namespace DataSharingAndSync
 
     class BankAccount
     {
+        public object padlock = new object();
         public int Balance { get; set; }
 
         public void Deposit(int amount)
         {
-            Balance += amount;
+            lock (padlock)
+            {
+                Balance += amount;
+            }
         }
 
         public void Withdraw(int amount)
         {
-            Balance -= amount;
+            lock (padlock)
+            {
+                Balance -= amount;
+            }
         }
     }
 }
